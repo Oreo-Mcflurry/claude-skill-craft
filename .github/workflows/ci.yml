@@ -1,0 +1,100 @@
+name: CI - Install & Uninstall Test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test-install:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    name: Test on ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Ensure Claude Code config directory exists
+        run: mkdir -p ~/.claude/commands
+
+      # ─── Test install ───
+      - name: Run install.js
+        run: node install.js
+
+      - name: Verify commands installed
+        run: |
+          test -f ~/.claude/commands/skill-create.md && echo "skill-create.md OK" || exit 1
+          test -f ~/.claude/commands/skill-review.md && echo "skill-review.md OK" || exit 1
+          echo "Commands: All files verified"
+
+      - name: Verify references installed
+        run: |
+          test -f ~/.claude/commands/skill-craft-references/five-rules.md && echo "five-rules.md OK" || exit 1
+          test -f ~/.claude/commands/skill-craft-references/description-patterns.md && echo "description-patterns.md OK" || exit 1
+          test -f ~/.claude/commands/skill-craft-references/body-template.md && echo "body-template.md OK" || exit 1
+          test -f ~/.claude/commands/skill-craft-references/review-checklist.md && echo "review-checklist.md OK" || exit 1
+          echo "References: All files verified"
+
+      # ─── Test uninstall ───
+      - name: Run uninstall.js
+        run: node uninstall.js
+
+      - name: Verify commands removed
+        run: |
+          test ! -f ~/.claude/commands/skill-create.md && echo "skill-create.md removed" || exit 1
+          test ! -f ~/.claude/commands/skill-review.md && echo "skill-review.md removed" || exit 1
+          echo "Commands: All files removed"
+
+      - name: Verify references removed
+        run: |
+          test ! -d ~/.claude/commands/skill-craft-references && echo "References dir removed" || exit 1
+          echo "References: All files removed"
+
+  test-npm-package:
+    runs-on: ubuntu-latest
+    name: Test npm package structure
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Verify package.json
+        run: |
+          node -e "
+            const pkg = require('./package.json');
+            const assert = require('assert');
+            assert(pkg.scripts.postinstall, 'postinstall script missing');
+            assert(pkg.scripts.preuninstall, 'preuninstall script missing');
+            assert(pkg.files.includes('commands/skill-create.md'), 'skill-create.md not in files');
+            assert(pkg.files.includes('commands/skill-review.md'), 'skill-review.md not in files');
+            assert(pkg.files.includes('references/five-rules.md'), 'five-rules.md not in files');
+            console.log('package.json OK');
+          "
+
+      - name: Verify all packaged files exist
+        run: |
+          test -f commands/skill-create.md
+          test -f commands/skill-review.md
+          test -f references/five-rules.md
+          test -f references/description-patterns.md
+          test -f references/body-template.md
+          test -f references/review-checklist.md
+          test -f install.js
+          test -f uninstall.js
+          test -f claude-md-snippet.md
+          echo "All packaged files exist"
+
+      - name: Test npm pack
+        run: |
+          npm pack --dry-run 2>&1 | tee pack-output.txt
+          echo "npm pack dry-run OK"
