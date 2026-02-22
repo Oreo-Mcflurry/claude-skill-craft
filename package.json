@@ -1,0 +1,36 @@
+{
+  "name": "claude-skill-craft",
+  "version": "1.0.0",
+  "description": "Claude Code skill for creating and reviewing high-quality SKILL.md files. Applies Anthropic's 5 body rules: progressive disclosure, description-only triggers, 500-line body limit, concise instructions, and verification loops.",
+  "keywords": [
+    "claude",
+    "claude-code",
+    "skill",
+    "skill-creator",
+    "skill-reviewer",
+    "anthropic",
+    "prompt-engineering"
+  ],
+  "author": "Oreo-Mcflurry",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Oreo-Mcflurry/claude-skill-craft.git"
+  },
+  "homepage": "https://github.com/Oreo-Mcflurry/claude-skill-craft#readme",
+  "files": [
+    "commands/skill-create.md",
+    "commands/skill-review.md",
+    "references/five-rules.md",
+    "references/description-patterns.md",
+    "references/body-template.md",
+    "references/review-checklist.md",
+    "claude-md-snippet.md",
+    "install.js",
+    "uninstall.js"
+  ],
+  "scripts": {
+    "postinstall": "node install.js",
+    "preuninstall": "node uninstall.js"
+  }
+}
