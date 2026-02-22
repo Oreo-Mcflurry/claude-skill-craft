@@ -24,7 +24,7 @@ SKILL.md의 body를 어떻게 쓰느냐에 따라 결과물 품질이 완전히 
 > description은 **'언제 쓸지'** 를 결정하고, body는 **'어떻게 할지'** 를 결정합니다.
 > 이 두 역할을 섞는 순간 스킬은 발동도 안 되고 품질도 떨어집니다.
 
-`claude-skill-craft`는 Anthropic 공식 문서와 엔지니어링 블로그에서 추출한 5가지 규칙을 자동으로 적용합니다.
+`claude-skill-craft`는 Anthropic 공식 가이드(클로드의 기술 습득 완전 가이드)와 엔지니어링 블로그에서 추출한 5가지 규칙을 자동으로 적용합니다.
 
 ## Installation
 
@@ -46,7 +46,7 @@ npm install -g claude-skill-craft
 
 Claude가 5가지 규칙에 맞춰 다음을 생성합니다:
 1. 최적화된 `description` (1,024자 이하, 3인칭)
-2. 규칙을 준수하는 `body` (500줄 이하)
+2. 규칙을 준수하는 `body` (5,000 단어 이하)
 3. 참조 파일 (필요 시 자동 분리)
 4. 설치 가이드
 
@@ -70,7 +70,7 @@ Claude가 5가지 규칙에 맞춰 다음을 생성합니다:
 |----------------------------|-------|-------|
 | 1. Progressive Disclosure  | 8/10  | A     |
 | 2. Description-Only Trigger| 4/10  | F     |
-| 3. 500-Line Body Limit    | 9/10  | A     |
+| 3. Body Size Limit        | 9/10  | A     |
 | 4. Token Efficiency        | 6/10  | B     |
 | 5. Verification Loop       | 3/10  | F     |
 | **Total**                  | **30/50** | **C** |
@@ -88,7 +88,7 @@ Anthropic의 공식 문서와 엔지니어링 블로그에서 추출한 SKILL.md
 |---|------|-----------|
 | 1 | **Progressive Disclosure** | 스킬은 3단계로 로딩됨. body는 목차, 참조 파일은 각 장 |
 | 2 | **Description-Only Trigger** | "언제 쓸지"는 description에만. body에 적으면 토큰 낭비 |
-| 3 | **500-Line Body Limit** | 맥락 범위는 공공재. body는 짧게, 나머지는 참조 파일로 |
+| 3 | **Body Size Limit** | 맥락 범위는 공공재. body는 5,000단어 이하, 나머지는 참조 파일로 |
 | 4 | **Claude Already Knows** | 개념 설명 대신 코드 예시. 50토큰 > 150토큰 |
 | 5 | **Verification Loops** | 실행→검증→수정→재검증. "MUST" > "always" |
 

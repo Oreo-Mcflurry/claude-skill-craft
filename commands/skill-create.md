@@ -24,11 +24,15 @@ Read the description patterns reference:
 Read ~/.claude/commands/skill-craft-references/description-patterns.md
 ```
 
-Generate a description following these MUST rules:
+Generate a description following the official structure formula: `[WHAT] + [WHEN] + [KEY features]`
+
+MUST rules:
 - MUST be under 1,024 characters
+- MUST NOT contain XML tags (`< >`)
 - MUST use 3rd person ("Use this agent when...")
 - MUST include 3+ keyword variants for discoverability
 - MUST define boundaries ("For X, see other-skill" if relevant)
+- SHOULD include negative triggers if scope is ambiguous ("Not for X")
 
 Present the description to the user for approval before proceeding.
 
@@ -46,7 +50,7 @@ Read ~/.claude/commands/skill-craft-references/body-template.md
 
 Apply these constraints when writing the body:
 - MUST contain zero "when to use" language (Rule 2)
-- MUST stay under 500 lines, ideally under 300 (Rule 3)
+- MUST stay under 5,000 words, ideally under 300 lines (Rule 3)
 - MUST use code examples over concept explanations (Rule 4)
 - MUST include a verification checklist at the end (Rule 5)
 - MUST use "MUST" / "NEVER" for critical constraints (Rule 5)
@@ -59,14 +63,7 @@ Determine freedom level based on task type:
 
 ### Step 4: Structure Reference Files
 
-If body exceeds 200 lines, split into:
-```
-commands/[skill-name].md          ← Orchestrator (body)
-references/[skill-name]/
-├── [topic-a].md                  ← Detailed reference
-├── [topic-b].md                  ← Detailed reference
-└── ...
-```
+If body exceeds 200 lines, split into reference files.
 
 Each reference file:
 - MUST have a TOC if over 100 lines
@@ -75,24 +72,38 @@ Each reference file:
 
 ### Step 5: Generate Output
 
-Create the complete SKILL.md file. If reference files are needed, create those too.
+Create the complete skill folder. MUST follow Anthropic's folder structure:
 
-Output file structure:
 ```
-[skill-name].md                   ← Main skill file
-[skill-name]-references/          ← Only if needed
-├── [ref-1].md
-└── [ref-2].md
+skill-name/                       ← kebab-case folder name
+├── SKILL.md                      ← MUST be exactly "SKILL.md" (case-sensitive)
+├── scripts/                      ← Optional: executable code
+├── references/                   ← Only if needed
+│   ├── [ref-1].md
+│   └── [ref-2].md
+└── assets/                       ← Optional: templates, icons
 ```
+
+**Naming rules (MUST follow):**
+- Folder name: kebab-case only (e.g., `my-cool-skill`)
+- No spaces, underscores, or uppercase in folder name
+- File MUST be named `SKILL.md` (not skill.md, SKILL.MD, etc.)
+- NEVER include `README.md` in the skill folder
+- NEVER use "claude" or "anthropic" in the skill name (reserved)
 
 ### Step 6: Self-Review
 
 Before presenting to the user, verify internally:
 
-- [ ] description under 1,024 characters
-- [ ] description in 3rd person
+- [ ] folder name is kebab-case, no spaces/underscores/uppercase
+- [ ] file is named exactly `SKILL.md` (case-sensitive)
+- [ ] no `README.md` in skill folder
+- [ ] skill name does not contain "claude" or "anthropic"
+- [ ] description under 1,024 characters, no XML tags `< >`
+- [ ] description in 3rd person with [WHAT] + [WHEN] + [KEY features]
+- [ ] description includes negative triggers if relevant ("not for X")
 - [ ] body has zero "when to use" language
-- [ ] body under 500 lines (count with `wc -l` if writing to file)
+- [ ] body under 5,000 words (count with `wc -w` if writing to file)
 - [ ] no concept explanations Claude already knows
 - [ ] verification checklist present in body
 - [ ] MUST/NEVER used for critical rules

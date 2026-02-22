@@ -32,12 +32,31 @@ Read [path/to/reference.md]
 If any check fails, fix and re-verify before presenting to user.
 ```
 
-## Full Skill with Frontmatter
+## Full Skill with Frontmatter (Folder-Based)
 
+Folder structure:
+```
+skill-name/           ← kebab-case, no spaces/underscores/uppercase
+├── SKILL.md          ← MUST be exactly this name (case-sensitive)
+├── scripts/          ← Optional
+├── references/       ← Optional
+└── assets/           ← Optional
+```
+
+**NEVER include README.md in the skill folder.**
+**NEVER use "claude" or "anthropic" in the skill name.**
+
+SKILL.md content:
 ```markdown
 ---
 name: skill-name
-description: "Use this agent when the user wants to [ACTION]. Also use when the user mentions '[KW1],' '[KW2],' or '[KW3].' For [RELATED], see [OTHER_SKILL]."
+description: "[WHAT it does]. [WHEN to use - trigger phrases]. [KEY features]."
+license: MIT
+allowed-tools: "Bash(python:*) WebFetch"
+compatibility: "Requires Python 3.10+"
+metadata:
+  author: your-name
+  version: 1.0.0
 ---
 
 # [Skill Title]
@@ -59,13 +78,24 @@ $ARGUMENTS
 [Checklist-based verification loop]
 
 ## Constraints
-- Body MUST stay under 500 lines
+- Body MUST stay under 5,000 words
 - NEVER [prohibited action]
 - [Freedom level] for [aspect]
 
 ## Output Format
 [Expected deliverable structure]
 ```
+
+**Frontmatter field reference:**
+
+| Field | Required | Notes |
+|-------|----------|-------|
+| `name` | Yes | kebab-case, must match folder name |
+| `description` | Yes | Under 1,024 chars, no XML tags `< >` |
+| `license` | No | e.g., MIT, Apache-2.0 |
+| `allowed-tools` | No | Restrict tool access |
+| `compatibility` | No | 1-500 chars, environment requirements |
+| `metadata` | No | Custom key-value pairs (author, version, mcp-server) |
 
 ## Reference File Template
 
@@ -120,8 +150,49 @@ Make sure everything looks good.
 - [ ] description is under 1,024 characters
 - [ ] description uses 3rd person voice
 - [ ] body contains zero "when to use" language
-- [ ] body is under 500 lines (run `wc -l`)
+- [ ] body is under 5,000 words (run `wc -w`)
 - [ ] all reference files have TOC if over 100 lines
 - [ ] MUST/NEVER used for critical constraints
 If any item fails, fix it and re-run the checklist.
 ```
+
+## Advanced Techniques
+
+### Composability
+Skills MUST work alongside other skills. NEVER assume your skill is the only one loaded.
+
+### Programmatic Validation
+For critical checks, bundle validation scripts instead of relying on language-only instructions:
+```
+# Language-only (non-deterministic)
+"Check all fields are valid"
+
+# Script-based (deterministic)
+python scripts/validate.py --input {filename}
+```
+Code is deterministic; language interpretation is not.
+
+### Laziness Prevention
+Add explicit encouragement for thoroughness in complex tasks:
+```markdown
+# Performance Note
+- Take time to be thorough with this task
+- Quality matters more than speed
+- Do NOT skip verification steps
+```
+Note: More effective in user prompts than in SKILL.md body.
+
+### Testing Guidance
+Three areas to test:
+1. **Trigger test**: Does the skill activate on expected queries? (~10-20 test queries, target 90%+ trigger rate)
+2. **Functional test**: Does it produce correct output? (valid output, successful API calls, error handling)
+3. **Performance test**: Is it better than no skill? (fewer messages, fewer tokens, fewer failed calls)
+
+### Common Skill Patterns
+| Pattern | When to Use |
+|---------|-------------|
+| Sequential Workflow | Multi-step processes in specific order |
+| Multi-MCP Coordination | Workflow spans multiple services |
+| Iterative Refinement | Output quality improves with iterations |
+| Context-Aware Selection | Same result, different tools based on context |
+| Domain Intelligence | Skill adds expert knowledge beyond tool access |

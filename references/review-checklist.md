@@ -1,5 +1,22 @@
 # Skill Review Checklist
 
+## Pre-Check: Structure Validation (Pass/Fail)
+
+These MUST pass before scoring. Any failure is an automatic Critical Issue:
+
+| Check | Pass | Fail |
+|-------|------|------|
+| Folder name is kebab-case | ✅ | ❌ Auto-fail |
+| File is named exactly `SKILL.md` (case-sensitive) | ✅ | ❌ Auto-fail |
+| YAML frontmatter has `---` delimiters | ✅ | ❌ Auto-fail |
+| `name` field exists and is kebab-case | ✅ | ❌ Auto-fail |
+| `description` field exists and is non-empty | ✅ | ❌ Auto-fail |
+| No XML tags (`< >`) in frontmatter | ✅ | ❌ Auto-fail |
+| No `README.md` in skill folder | ✅ | ❌ Auto-fail |
+| Skill name does not contain "claude" or "anthropic" | ✅ | ❌ Auto-fail |
+
+## Scoring
+
 Score each rule 0-10. Total: /50. Grade: A (40+), B (30-39), C (20-29), F (<20).
 
 ## Rule 1: Progressive Disclosure (0-10)
@@ -30,16 +47,16 @@ Score each rule 0-10. Total: /50. Grade: A (40+), B (30-39), C (20-29), F (<20).
 - "Invoke this skill if"
 - "이 스킬은 ~할 때 사용"
 
-## Rule 3: 500-Line Body Limit (0-10)
+## Rule 3: Body Size Limit (0-10)
 
 | Check | Pass | Fail |
 |-------|------|------|
-| Body is under 500 lines | Yes → +4 | No → 0 |
-| Body is under 300 lines (ideal) | Yes → +2 | 300-500 → +1, >500 → 0 |
+| Body is under 5,000 words | Yes → +4 | No → 0 |
+| Body is under 300 lines (ideal) | Yes → +2 | 300+ lines → +1, >5,000 words → 0 |
 | Reference files each under 300 lines | Yes → +2 | No → 0 |
 | Reference files over 100 lines have TOC | Yes → +2 | No/NA → 0 |
 
-**Measurement:** Count lines excluding frontmatter YAML.
+**Measurement:** Count words excluding frontmatter YAML (`wc -w`).
 
 ## Rule 4: Token Efficiency (0-10)
 
@@ -76,7 +93,7 @@ Score each rule 0-10. Total: /50. Grade: A (40+), B (30-39), C (20-29), F (<20).
 |------|-------|-------|
 | 1. Progressive Disclosure | /10 | |
 | 2. Description-Only Trigger | /10 | |
-| 3. 500-Line Body Limit | /10 | |
+| 3. Body Size Limit | /10 | |
 | 4. Token Efficiency | /10 | |
 | 5. Verification Loop | /10 | |
 | **Total** | **/50** | **[A/B/C/F]** |
@@ -93,3 +110,15 @@ Score each rule 0-10. Total: /50. Grade: A (40+), B (30-39), C (20-29), F (<20).
 ### Rewritten Sections
 [Provide rewritten version of any failing sections]
 ```
+
+## Bonus Checks (Informational, not scored)
+
+| Check | Status |
+|-------|--------|
+| Description has negative triggers (if scope is ambiguous) | |
+| Description follows [WHAT] + [WHEN] + [KEY] formula | |
+| Skill works alongside other skills (composability) | |
+| Critical validations use scripts, not language-only instructions | |
+| Error handling included | |
+| Examples provided | |
+| References clearly linked | |

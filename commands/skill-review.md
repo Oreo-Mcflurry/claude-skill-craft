@@ -22,7 +22,19 @@ MUST read the full skill file before proceeding. NEVER review without reading.
 Read ~/.claude/commands/skill-craft-references/review-checklist.md
 ```
 
-### Step 3: Analyze Against 5 Rules
+### Step 3: Structure Pre-Check
+
+Before scoring, validate structure (from checklist pre-check):
+- Folder name is kebab-case
+- File is named exactly `SKILL.md`
+- YAML frontmatter has `---` delimiters
+- `name` field is kebab-case, no "claude"/"anthropic"
+- `description` field exists, under 1,024 chars, no XML tags `< >`
+- No `README.md` in skill folder
+
+Any failure is an automatic Critical Issue in the report.
+
+### Step 4: Score Against 5 Rules
 
 For each rule, score 0-10 based on the checklist criteria:
 
@@ -37,8 +49,8 @@ Scan body for "when to use" language patterns:
 - "이 스킬은 ~할 때"
 Count violations. Check if description exists and follows 3rd-person format.
 
-**Rule 3 — 500-Line Body Limit:**
-Count body lines (excluding frontmatter). Flag if >500. Note ideal is <300.
+**Rule 3 — Body Size Limit:**
+Count body words (excluding frontmatter). Flag if >5,000 words. Note ideal is <300 lines.
 Check reference file depth and TOC presence.
 
 **Rule 4 — Token Efficiency:**
@@ -51,7 +63,7 @@ Count estimated wasted tokens.
 **Rule 5 — Verification Loop:**
 Check for checklist presence, MUST/NEVER usage, specific error messages, fix-and-reverify pattern.
 
-### Step 4: Generate Report
+### Step 5: Generate Report
 
 Use this exact format:
 
@@ -66,7 +78,7 @@ Use this exact format:
 |------|-------|-------|
 | 1. Progressive Disclosure | /10 | |
 | 2. Description-Only Trigger | /10 | |
-| 3. 500-Line Body Limit | /10 | |
+| 3. Body Size Limit | /10 | |
 | 4. Token Efficiency | /10 | |
 | 5. Verification Loop | /10 | |
 | **Total** | **/50** | **[A/B/C/F]** |
@@ -81,7 +93,7 @@ Use this exact format:
 [Numbered list]
 ```
 
-### Step 5: Provide Fixed Version
+### Step 6: Provide Fixed Version
 
 If score is below 40 (Grade B), MUST provide a rewritten version of the skill.
 If score is 40+, provide only the sections that need improvement.
@@ -95,7 +107,7 @@ The rewritten version MUST:
 Read ~/.claude/commands/skill-craft-references/body-template.md
 ```
 
-### Step 6: Self-Verify Report
+### Step 7: Self-Verify Report
 
 Before presenting:
 - [ ] All 5 rules scored with specific evidence

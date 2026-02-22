@@ -41,27 +41,44 @@ The `description` field is the SOLE trigger for skill activation. Body content i
 
 **description best practices:**
 - Max 1,024 characters
+- MUST NOT contain XML tags (`< >`) — security restriction
+- Structure: `[WHAT it does] + [WHEN to use / triggers] + [KEY features]`
 - Write in 3rd person: "Use this agent when..." not "I help with..."
 - Include variant phrasings and synonyms for discoverability
+- Add negative triggers if scope is ambiguous ("Not for X, see Y")
 - Cover both English and localized trigger phrases if needed
 
-## Rule 3: 500-Line Body Limit
+## Rule 3: Body Size Limit
 
 Context window is a shared resource. When a skill loads, it competes with conversation history, system prompt, and other tools for token space.
 
 **Hard rules:**
-- Body MUST stay under 500 lines
+- SKILL.md MUST stay under 5,000 words (Anthropic official guide)
+- Ideal body length: under 300 lines (~1,500 words)
 - Reference files MUST be linked at max 1 level deep from SKILL.md
 - 2+ levels of nested references risk Claude reading only first 100 lines (head -100 behavior)
 - Reference files over 100 lines MUST have a table of contents at the top
 
 **Structure pattern:**
 ```
-SKILL.md (body)     → Table of contents / orchestrator (~200 lines)
-├── references/a.md → Detailed topic A (~100-300 lines)
-├── references/b.md → Detailed topic B (~100-300 lines)
-└── references/c.md → Detailed topic C (~100-300 lines)
+skill-name/                        ← kebab-case folder
+├── SKILL.md (body)                → Orchestrator (~200 lines, under 5,000 words)
+├── scripts/                       → Optional executable code
+├── references/
+│   ├── a.md                       → Detailed topic A (~100-300 lines)
+│   ├── b.md                       → Detailed topic B (~100-300 lines)
+│   └── c.md                       → Detailed topic C (~100-300 lines)
+└── assets/                        → Optional templates, icons
 ```
+
+**Folder naming rules:**
+- MUST use kebab-case: `my-skill-name` ✅
+- No spaces: `My Skill Name` ❌
+- No underscores: `my_skill_name` ❌
+- No uppercase: `MySkillName` ❌
+- File MUST be exactly `SKILL.md` (case-sensitive)
+- NEVER include `README.md` in skill folder
+- NEVER use "claude" or "anthropic" in skill name (reserved)
 
 ## Rule 4: Claude Already Knows
 

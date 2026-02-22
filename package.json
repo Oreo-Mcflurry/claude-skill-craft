@@ -1,7 +1,7 @@
 {
   "name": "claude-skill-craft",
-  "version": "1.0.0",
-  "description": "Claude Code skill for creating and reviewing high-quality SKILL.md files. Applies Anthropic's 5 body rules: progressive disclosure, description-only triggers, 500-line body limit, concise instructions, and verification loops.",
+  "version": "1.1.0",
+  "description": "Claude Code skill for creating and reviewing high-quality SKILL.md files. Applies Anthropic's 5 body rules: progressive disclosure, description-only triggers, body size limit, concise instructions, and verification loops.",
   "keywords": [
     "claude",
     "claude-code",
